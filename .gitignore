@@ -1,4 +1,4 @@
-# build output (the finished PDF lives on the Releases page)
+# build output (finished PDFs live in downloads/)
 source/*.pdf
 source/guide.html
 source/_raw.pdf

@@ -1,6 +1,6 @@
 # h1 pocket guide: editable source
 
-Everything needed to rebuild the PDF, for example when Jake's guide is updated for a newer h1. You don't need any of this to read the guide: the finished PDF is on the [Releases page](https://github.com/slowphase/h1-pocket-guide/releases).
+Everything needed to rebuild the PDF, for example when Jake's guide is updated for a newer h1. You don't need any of this to read the guide: the finished PDF is in [`downloads/`](../downloads/).
 
 ## What's where
 
@@ -35,6 +35,6 @@ Page numbers, the contents page, footers and bookmarks are all worked out from t
 1. Update the wording in `content.py` from [jakehandy.com/h1](https://jakehandy.com/h1), keeping Jake's text exactly as he wrote it.
 2. Set `FIRMWARE` and `FIRMWARE_BUILD` to the new h1 build, and bump `EDITION`.
 3. Rebuild with `--check`, look at every page, and make sure each instrument still fits on one page.
-4. Add an entry to `CHANGELOG.md` and publish a new release with the PDF and source zip.
+4. Add an entry to `CHANGELOG.md`, and add the new PDF and source zip to `downloads/` (keep the older ones).
 
 Check the result with `pdffonts` too. Only Space Grotesk and JetBrains Mono should be listed.

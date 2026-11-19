@@ -11,10 +11,10 @@ Same words, same artwork, laid out for comfortable reading on an iPad mini in po
 
 | | Version | Download |
 | --- | --- | --- |
-| **PDF** (iPad mini, 30 pages) | Guide v1.0.0 · h1 v0.2.1 | [h1-pocket-guide-v1.0.0-h1-v0.2.1.pdf](https://github.com/slowphase/h1-pocket-guide/releases/download/v1.0.0/h1-pocket-guide-v1.0.0-h1-v0.2.1.pdf) |
-| **Editable source** | Guide v1.0.0 · h1 v0.2.1 | [h1-pocket-guide-v1.0.0-h1-v0.2.1-source.zip](https://github.com/slowphase/h1-pocket-guide/releases/download/v1.0.0/h1-pocket-guide-v1.0.0-h1-v0.2.1-source.zip) |
+| **PDF** (iPad mini, 30 pages) | Guide v1.0.0 · h1 v0.2.1 | [h1-pocket-guide-v1.0.0-h1-v0.2.1.pdf](https://github.com/slowphase/h1-pocket-guide/raw/main/downloads/h1-pocket-guide-v1.0.0-h1-v0.2.1.pdf) |
+| **Editable source** | Guide v1.0.0 · h1 v0.2.1 | [h1-pocket-guide-v1.0.0-h1-v0.2.1-source.zip](https://github.com/slowphase/h1-pocket-guide/raw/main/downloads/h1-pocket-guide-v1.0.0-h1-v0.2.1-source.zip) |
 
-The same source is in the [`source/`](source/) folder, with build instructions in [`source/README.md`](source/README.md). Older and newer editions are on the [Releases page](https://github.com/slowphase/h1-pocket-guide/releases).
+The same source is in the [`source/`](source/) folder, with build instructions in [`source/README.md`](source/README.md). Every edition is kept in [`downloads/`](downloads/), named with its guide and firmware versions, so an older PDF is never mistaken for the current one.
 
 ## Version numbers
 
