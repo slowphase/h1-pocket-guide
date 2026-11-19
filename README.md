@@ -4,8 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/slowphase/h1-pocket-guide/raw/main/downloads/h1-pocket-guide-v1.0.0-h1-v0.2.1.pdf"><img src="https://img.shields.io/badge/download-PDF%20for%20h1%20v0.2.1-c8ff4b?style=for-the-badge&labelColor=17191E" alt="Download the PDF (for h1 v0.2.1)"></a>
-  <a href="https://github.com/slowphase/h1-pocket-guide/raw/main/downloads/h1-pocket-guide-v1.0.0-h1-v0.2.1-source.zip"><img src="https://img.shields.io/badge/download-source%20zip-c8ff4b?style=for-the-badge&labelColor=17191E" alt="Download the editable source"></a>
-  <a href="LICENSE.md"><img src="https://img.shields.io/badge/licence-guide%20%C2%A9%20Jake%20Handy%20%7C%20layout%20MIT-c8ff4b?style=for-the-badge&labelColor=17191E" alt="Licence: guide text and artwork by Jake Handy; layout code MIT"></a>
+  <a href="https://github.com/jakehandy"><img src="https://img.shields.io/badge/github-jakehandy-c8ff4b?style=for-the-badge&labelColor=17191E&logo=github&logoColor=c8ff4b" alt="Jake Handy on GitHub"></a>
 </p>
 
 *A dark, iPad-optimised edition of Jake Handy's original manual for [h1](https://github.com/jakehandy/h1), the free custom firmware that turns the M-VAVE FM-1 into fourteen instruments.*
