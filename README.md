@@ -2,6 +2,12 @@
   <img src="previews/hero.jpg" alt="h1 pocket guide: a band of all fourteen instrument artworks across the top, from COZY's lo-fi room to TURBO's synthwave sunset, over a thin strip of their accent colours. Below, a large h1 wordmark with the words pocket guide and a dark, iPad-optimised edition of Jake Handy's original manual, and the fourteen instrument names in their own colours along the bottom." width="100%">
 </p>
 
+<p align="center">
+  <a href="https://github.com/slowphase/h1-pocket-guide/raw/main/downloads/h1-pocket-guide-v1.0.0-h1-v0.2.1.pdf"><img src="https://img.shields.io/badge/download-PDF%20for%20h1%20v0.2.1-c8ff4b?style=for-the-badge&labelColor=17191E" alt="Download the PDF (for h1 v0.2.1)"></a>
+  <a href="https://github.com/slowphase/h1-pocket-guide/raw/main/downloads/h1-pocket-guide-v1.0.0-h1-v0.2.1-source.zip"><img src="https://img.shields.io/badge/download-source%20zip-c8ff4b?style=for-the-badge&labelColor=17191E" alt="Download the editable source"></a>
+  <a href="LICENSE.md"><img src="https://img.shields.io/badge/licence-guide%20%C2%A9%20Jake%20Handy%20%7C%20layout%20MIT-c8ff4b?style=for-the-badge&labelColor=17191E" alt="Licence: guide text and artwork by Jake Handy; layout code MIT"></a>
+</p>
+
 *A dark, iPad-optimised edition of Jake Handy's original manual for [h1](https://github.com/jakehandy/h1), the free custom firmware that turns the M-VAVE FM-1 into fourteen instruments.*
 
 Same words, same artwork, laid out for comfortable reading on an iPad mini in portrait: one page per instrument, a tappable contents page, bookmarks, and links on every page.
