@@ -45,6 +45,7 @@ h1 is made by **Jake Handy**. Install and update it with his official instructio
 - [h1 on GitHub](https://github.com/jakehandy/h1) (source, releases and install notes)
 - [h1 on The Firmware Hub](https://thefirmwarehub.com/firmware/h1/) (install from Chrome or Edge)
 - [The original guide](https://jakehandy.com/h1) and the [browser simulator](https://jakehandy.com/public/h1/simulator.html)
+- [fm1-browser-simulator](https://github.com/jakehandy/fm1-browser-simulator) (the simulator's source on GitHub: try h1 in your browser before installing)
 
 ## Credits
 
