@@ -1,0 +1,8 @@
+# build output (the finished PDF lives on the Releases page)
+source/*.pdf
+source/guide.html
+source/_raw.pdf
+__pycache__/
+*.pyc
+.DS_Store
+.venv/

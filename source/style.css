@@ -1,0 +1,237 @@
+/* h1 guide, iPad edition. Page = iPad mini portrait ratio (1488 x 2266 = 1 : 1.523). */
+
+@font-face { font-family: "Space Grotesk"; font-weight: 300; src: url(fonts/space-grotesk-latin-300-normal.woff2) format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 400; src: url(fonts/space-grotesk-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 500; src: url(fonts/space-grotesk-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 600; src: url(fonts/space-grotesk-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 700; src: url(fonts/space-grotesk-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url(fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 500; src: url(fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "JBM Arrow"; src: url(fonts/jetbrains-mono-arrows-400.woff2) format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url(fonts/jetbrains-mono-latin-700-normal.woff2) format("woff2"); }
+
+:root {
+  --bg: #17191E;
+  --panel: #1D2026;
+  --panel-2: #22262D;
+  --rule: #2C3038;
+  --text: #EDE9E0;      /* warm off-white, ~14:1 on bg */
+  --text-2: #B4B2AA;    /* secondary, ~8:1 */
+  --text-3: #8A8C92;    /* labels, ~5:1 */
+  --accent: #EDE9E0;    /* overridden per instrument */
+  --pw: 432pt;
+  --ph: 658.08pt;
+  --mx: 40px;
+}
+
+@page { size: 432pt 658.08pt; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); }
+body {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-feature-settings: "ss01" 0;
+}
+a { color: inherit; text-decoration: none; }
+
+.page {
+  width: var(--pw);
+  height: var(--ph);
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  padding: 44px var(--mx) 0;
+  page-break-after: always;
+  break-after: page;
+}
+.page:last-child { page-break-after: auto; break-after: auto; }
+
+/* ---------- running footer ---------- */
+.foot {
+  position: absolute; left: var(--mx); right: var(--mx); bottom: 20px;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 10.5px; letter-spacing: .04em;
+  color: var(--text-2); border-top: 1px solid var(--rule); padding-top: 9px;
+}
+.foot .back { justify-self: start; color: var(--text); }
+.foot .back::before { content: "\2190\00a0"; color: var(--text-3); }  /* ← */
+.foot .lbl { justify-self: center; color: var(--text-3); }
+.foot .num { justify-self: end; color: var(--text); font-weight: 500; }
+
+/* ---------- contents ---------- */
+.toc { border-top: 1px solid var(--rule); }
+.toc-row {
+  display: grid; grid-template-columns: 34px 1fr auto; align-items: baseline;
+  padding: 9px 0; border-bottom: 1px solid var(--rule); font-size: 16px; color: var(--text);
+}
+.toc-row .tn, .toc-row .tp { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 11px; color: var(--text-3); }
+.toc-row .tp { color: var(--text-2); }
+.toc-row.off { color: var(--text-3); }
+.toc-insts { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; }
+.toc-inst {
+  display: grid; grid-template-columns: 28px 58px 1fr auto; align-items: center; gap: 0 9px;
+  padding: 5px 0; border-bottom: 1px solid var(--rule);
+}
+.toc-inst img { width: 28px; height: 28px; border-radius: 4px; display: block; }
+.toc-inst .nm { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-weight: 500; font-size: 12px; color: var(--accent); letter-spacing: .04em; }
+.toc-inst .ct { font-size: 11.5px; line-height: 1.25; color: var(--text-2); }
+.toc-inst .tp { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 11px; color: var(--text-2); }
+
+/* ---------- type ---------- */
+.mono { font-family: "JetBrains Mono", "JBM Arrow", monospace; }
+.kicker {
+  font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 10px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--text-3);
+}
+h1.section {
+  font-size: 27px; font-weight: 500; letter-spacing: -.01em; line-height: 1.1;
+  display: flex; align-items: baseline; gap: 12px; margin: 6px 0 18px;
+}
+h1.section .n { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 12px; font-weight: 400; color: var(--text-3); letter-spacing: .05em; }
+.sub {
+  font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 10.5px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .14em; color: var(--text-3);
+  margin: 22px 0 10px; display: flex; align-items: center; gap: 10px;
+}
+.sub::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+p { margin: 0 0 10px; color: var(--text-2); }
+p.lead { font-size: 16px; line-height: 1.5; color: var(--text); }
+p b, .strong { color: var(--text); font-weight: 500; }
+
+/* keycap for FM-1 buttons named in running text */
+kbd {
+  font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: .76em; font-weight: 500;
+  color: var(--text); background: var(--panel-2); border: 1px solid #3A3F49;
+  border-bottom-width: 2px; border-radius: 4px; padding: 0 5px 1px; margin: 0 1px;
+  white-space: nowrap; letter-spacing: .03em; vertical-align: 1px;
+}
+
+/* ---------- labelled rows (reference / combos / recording steps) ---------- */
+.rows { border-top: 1px solid var(--rule); }
+.row {
+  display: grid; grid-template-columns: 132px 1fr; gap: 12px;
+  padding: 8px 0 8px; border-bottom: 1px solid var(--rule);
+}
+.row .k { display: flex; flex-wrap: wrap; gap: 4px; align-content: flex-start; padding-top: 1px; }
+.row .k kbd { font-size: 10.5px; vertical-align: 0; }
+.row .k .plus { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 10.5px; color: var(--text-3); padding: 1px 0; }
+.row .k .lbl { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 10.5px; color: var(--text-3); padding: 2px 0 0; }
+.row .v { color: var(--text-2); font-size: 13.5px; line-height: 1.48; }
+.row .v b { color: var(--text); font-weight: 500; }
+
+/* ---------- knob-setting rows (settings pages) ---------- */
+.knobrows { display: grid; gap: 8px; }
+.knobrow {
+  display: grid; grid-template-columns: 56px 1fr; gap: 0;
+  background: var(--panel); border-radius: 8px; overflow: hidden;
+}
+.knobrow .badge {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: var(--panel-2); border-right: 1px solid var(--rule);
+  font-family: "JetBrains Mono", "JBM Arrow", monospace; color: var(--text-3); font-size: 8.5px; letter-spacing: .12em;
+}
+.knobrow .badge .d { font-size: 19px; font-weight: 500; color: var(--text); letter-spacing: 0; line-height: 1.1; }
+.knobrow .body { padding: 8px 14px 9px; }
+.knobrow .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 3px; }
+.knobrow .name { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-weight: 500; font-size: 13.5px; color: var(--text); letter-spacing: .04em; }
+.knobrow .vals { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 10.5px; color: var(--text-2); text-align: right; line-height: 1.5; max-width: 72%; }
+.knobrow .desc { color: var(--text-2); font-size: 13.5px; line-height: 1.45; }
+.knobrow.changed { box-shadow: inset 2px 0 0 var(--text-2); }
+
+/* ---------- figure ---------- */
+figure { margin: 6px 0 12px; }
+figure img { display: block; border-radius: 8px; image-rendering: pixelated; }
+figcaption { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 9.5px; color: var(--text-3); margin-top: 6px; letter-spacing: .03em; }
+
+/* ---------- COVER ---------- */
+.cover { padding-top: 54px; }
+.cover .brand { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 10px; color: var(--text-3); letter-spacing: .08em; }
+.cover .logo { font-weight: 700; font-size: 176px; line-height: .86; letter-spacing: -.05em; margin: 72px 0 34px -6px; color: var(--text); }
+.cover .tag { font-size: 21px; line-height: 1.32; font-weight: 400; color: var(--text-2); max-width: 430px; }
+.cover .tag b { color: var(--text); font-weight: 500; }
+.cover .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px 8px; margin-top: 72px; }
+.cover .grid a { display: block; }
+.cover .grid img { width: 100%; aspect-ratio: 1; display: block; border-radius: 6px; outline: 1px solid #262A31; }
+.cover .grid span { display: block; font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 8.5px; letter-spacing: .08em; margin-top: 5px; text-align: center; }
+.cover .edition {
+  position: absolute; left: var(--mx); right: var(--mx); bottom: 30px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 9.5px; color: var(--text-3); line-height: 1.6;
+}
+
+/* ---------- INSTRUMENT PAGE ---------- */
+.inst { padding-top: 40px; }
+
+.inst .head { display: grid; grid-template-columns: 184px 1fr; gap: 22px; position: relative; }
+.inst .art img {
+  width: 184px; height: 184px; display: block; border-radius: 10px;
+  outline: 1px solid var(--accent-edge);
+}
+.inst .meta { padding-top: 2px; }
+.inst .meta .kicker { display: flex; justify-content: space-between; white-space: nowrap; }
+.inst .name {
+  font-family: "Space Grotesk"; font-weight: 600; font-size: 46px; line-height: 1;
+  letter-spacing: -.01em; color: var(--accent); margin: 12px 0 6px;
+}
+.inst .cat { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 11.5px; color: var(--accent); letter-spacing: .06em; margin-bottom: 12px; }
+.inst .intro { color: var(--text); font-size: 14.5px; line-height: 1.5; margin: 0; }
+
+.inst .sub { margin: 20px 0 9px; }
+.knobs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.knob {
+  background: var(--panel); border-radius: 8px; padding: 9px 13px 10px;
+  border-top: 2px solid var(--accent-line);
+}
+.knob .kn { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 9px; letter-spacing: .14em; color: var(--text-3); }
+.knob .nm { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 15px; font-weight: 500; color: var(--accent); letter-spacing: .04em; margin: 2px 0 2px; }
+.knob .ds { color: var(--text-2); font-size: 13.5px; line-height: 1.42; }
+
+.algos { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; }
+.algo { display: grid; grid-template-columns: 22px 1fr; padding: 7px 0 7px; border-bottom: 1px solid var(--rule); }
+.algo .i { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 9.5px; color: var(--text-3); padding-top: 3px; }
+.algo .nm { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 12.5px; font-weight: 500; color: var(--text); letter-spacing: .05em; }
+.algo .ds { color: var(--text-2); font-size: 13px; line-height: 1.42; margin-top: 1px; }
+.algonote { color: var(--text-2); font-size: 13.5px; margin: -2px 0 6px; }
+
+/* paints the full page box on every printed page (guards against sub-pixel gaps) */
+body::before { content: ""; position: fixed; inset: -2px; background: var(--bg); z-index: -1; }
+
+/* ---------- components used by the remaining sections ---------- */
+p.note { margin-top: 12px; }
+.rows.mt { margin-top: 12px; }
+.sub:first-child { margin-top: 0; }
+a.xref { color: var(--text); border-bottom: 1px solid #4A4F59; }
+
+.stepfig { display: grid; grid-template-columns: 150px 1fr; gap: 18px; margin-top: 18px; align-items: start; }
+.stepfig figure { margin: 0 0 12px; }
+.stepfig img.sq { width: 150px; height: 150px; }
+.stepfig img.strip { width: 100%; height: auto; border-radius: 3px; }
+
+.figpair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0 4px; }
+.figpair figure { margin: 0; }
+.figpair img { width: 100%; height: auto; aspect-ratio: 1; }
+
+.faqs { border-top: 1px solid var(--rule); }
+.faq { padding: 14px 0 15px; border-bottom: 1px solid var(--rule); }
+.faq .q { font-size: 15.5px; font-weight: 500; color: var(--text); line-height: 1.35; margin-bottom: 6px; }
+.faq .a { font-size: 14px; color: var(--text-2); line-height: 1.5; }
+
+.colophon { margin-top: 26px; }
+.colophon p { font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 10px; line-height: 1.6; color: var(--text-3); margin: 0 0 6px; }
+.colophon a { color: var(--text-2); border-bottom: 1px solid #3A3F49; }
+.colophon .links { margin-top: 10px; }
+
+/* edition stamp (this layout's version + the firmware it documents) */
+.cover .stamp {
+  position: absolute; left: var(--mx); right: var(--mx); bottom: 78px;
+  font-family: "JetBrains Mono", "JBM Arrow", monospace; font-size: 9.5px; line-height: 1.6; color: var(--text-2);
+  border-top: 1px solid var(--rule); padding-top: 10px;
+}
+.cover .stamp a { color: var(--text); border-bottom: 1px solid #3A3F49; }
+.colophon .stamp2 { margin-top: 14px; color: var(--text-2); }
