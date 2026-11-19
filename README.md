@@ -17,18 +17,8 @@ Same words, same artwork, laid out for comfortable reading on an iPad mini in po
 ## A look inside
 
 <p align="center">
-  <img src="previews/look-inside.jpg" alt="Three pages from the guide on a dark charcoal background: the cover with a large h1 wordmark and a grid of all fourteen instrument artworks; the COZY page in peach, with its lo-fi room artwork, four knob cards and eight algorithms; and the loop settings page, with each setting tied to KNOB 1 to 4" width="100%">
+  <img src="previews/look-inside.jpg" alt="Three pages from the guide on a dark charcoal background: the cover with a large h1 wordmark and a grid of all fourteen instrument artworks; the contents page, listing the nine sections and the fourteen instruments with thumbnails and page numbers; and the TURBO page in magenta, with its synthwave sunset artwork, four knob cards and eight algorithms" width="100%">
 </p>
-
-<p align="center">
-  <img src="previews/instruments.jpg" alt="Three more pages: TURBO in magenta with its synthwave sunset artwork, URCHIN in red-orange with its glowing FM flower, and the global settings page with screenshots of the ARP page and the EDIT knob strip" width="100%">
-</p>
-
-<p align="center">
-  <img src="previews/navigation.jpg" alt="The contents page, listing all nine sections and the fourteen instruments with thumbnails and page numbers, beside the recording page with numbered steps for recording a loop" width="66%">
-</p>
-
-<p align="center"><sub>One page per instrument, each in its own colour · every setting tied to its knob · tap the contents, footers and bookmarks to jump around.</sub></p>
 
 ## Download
 
