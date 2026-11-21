@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the h1 iPad guide.
 
-    python3 build.py            -> h1-guide-ipad-dark.pdf
+    python3 build.py            -> h1-pocket-guide-v<EDITION>-h1-<FIRMWARE>.pdf
     python3 build.py --check    -> also prints per-page space left above the footer
 
 Pipeline: content.py (verbatim text) -> guide.html + style.css -> headless Chrome -> PDF
@@ -20,7 +20,9 @@ def md(s):
     s = html.escape(s, quote=False)
     s = re.sub(r"\[\[(.+?)\]\]", r"<kbd>\1</kbd>", s)
     s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", s)
-    return s
+    s = re.sub(r"\{\{(.+?)\|(.+?)\}\}",
+               lambda m: f'<a class="xref" href="{m[2] if m[2].startswith("http") else "#" + m[2]}">{m[1]}</a>', s)
+    return s.replace("\n", "<br>")
 
 def keys(parts):
     out = []
@@ -82,6 +84,13 @@ class Page:
 
 PAGES = []
 ANCHOR_PAGE = {}
+# where sections split across pages (tuned with --check so every page keeps clear space above the footer)
+SPLIT_USB = 2      # USB audio, MIDI in | MIDI out, USB host
+SPLIT_REF = 4      # reference rows on the first reference page
+SPLIT_HOLDS = 8    # holds and combos rows on their first page; the rest share a page with 03
+SPLIT_WRITE = 6    # writing-steps rows on the second recording page; the rest open the layers page
+SPLIT_FAQ = [3, 7, 11]  # FAQ page breaks; the last FAQ page also carries the credits
+DENSE = {"lava"}   # instrument pages with a ninth algorithm get slightly tighter spacing
 def page_of(anchor): return ANCHOR_PAGE[anchor]
 
 SECTIONS = [  # (number, title exactly as in the source, anchor)
@@ -103,12 +112,13 @@ def p_cover():
   <span id="cover"></span>
   <div class="brand"><a href="{C.SITE}">{html.escape(c["brand"])}</a></div>
   <div class="logo">h1</div>
-  <p class="tag"><b>Custom firmware for the M-VAVE FM-1.</b> Fourteen instruments with themed dynamic visuals.</p>
+  <p class="tag"><b>{html.escape(c["tagline_b"])}</b> {html.escape(c["tagline"])}</p>
+  <p class="io"><b>{html.escape(c["usb_b"])}</b> {html.escape(c["usb"])} <a class="xref" href="#usb">{html.escape(c["usb_link"])}</a></p>
   <div class="grid">{grid}</div>
   <div class="stamp">h1 pocket guide v{C.EDITION} · documents h1 firmware {C.FIRMWARE}<br>
     For newer builds, see <a href="{C.GUIDE_URL}">jakehandy.com/h1</a></div>
   <div class="edition">
-    <div>Guide matches h1's current build,<br><a href="{C.LINK_RELEASE}">v0.2.1 (5b697e5)</a>, 18 November 2026.</div>
+    <div>Guide matches h1's current build,<br><a href="{C.LINK_RELEASE}">{C.FIRMWARE_BUILD}</a>, {C.FIRMWARE_DATE}.</div>
     <div style="text-align:right">Not affiliated with M-VAVE.<br>FM-1 is their product. · <a href="{C.SITE}">jakehandy.com</a></div>
   </div>'''
     return Page("", "cover", body, ["cover"], cls="cover", foot=False)
@@ -125,21 +135,24 @@ def p_contents():
             f'<span class="ct">{html.escape(d["cat"])}</span><span class="tp">{page_of(d["id"]):02d}</span></a>'
             for d in C.INSTRUMENTS)
         return (f'<h1 class="section" id="contents">contents</h1><div class="toc">{rws}</div>'
-                f'{sub("the fourteen instruments")}<div class="toc-insts">{insts}</div>')
+                f'{sub("the " + C.COUNT_LABEL + " instruments")}<div class="toc-insts">{insts}</div>')
     return Page("contents", "contents", body, ["contents"], back=("cover", "cover"))
 
-def p_intro_ref():
+def p_intro():
     body = (h1("intro", "01", "intro") +
             f'<p class="lead">{md(C.INTRO[0])}</p>' + paras(C.INTRO[1:]) +
-            h1("reference", "02", "reference", "margin-top:22px") + sub("on the FM-1") +
-            rows(C.REF_ON_FM1[:5]))
-    return Page("01 · 02 · intro, reference", "intro", body, ["intro", "reference"])
+            sub(C.USB_TITLE, "usb") + f'<p>{md(C.USB_INTRO)}</p>' + rows(C.USB[:SPLIT_USB], "usb"))
+    return Page("01 · intro", "intro", body, ["intro", "usb"])
+
+def p_intro2():
+    body = sub(C.USB_TITLE + " (continued)") + rows(C.USB[SPLIT_USB:], "usb") + \
+           h1("reference", "02", "reference", "margin-top:26px") + sub("on the FM-1") + rows(C.REF_ON_FM1[:SPLIT_REF])
+    return Page("01 · 02 · intro, reference", "intro", body, ["reference"])
 
 def p_ref2():
-    body = (sub("on the FM-1 (continued)") + rows(C.REF_ON_FM1[5:]) +
-            f'<p class="note">{md(C.REF_MASTER_NOTE)}</p>' +
-            '<div style="height:10px"></div>' + sub("holds and combos", "holds") + rows(C.REF_HOLDS[:1]))
-    return Page("02 · reference", "reference", body, ["holds"])
+    body = (sub("on the FM-1 (continued)") + rows(C.REF_ON_FM1[SPLIT_REF:]) +
+            f'<p class="note">{md(C.REF_MASTER_NOTE)}</p>')
+    return Page("02 · reference", "reference", body, [])
 
 def p_ref3(a, b, cont=False):
     title = "holds and combos (continued)" if cont else "holds and combos"
@@ -147,15 +160,20 @@ def p_ref3(a, b, cont=False):
     body = sub(title, anchor) + rows(C.REF_HOLDS[a:b])
     return Page("02 · reference", "reference", body, [] if cont else ["holds"])
 
-def p_switch_loop():
-    s, l = C.SWITCHING, C.LOOP
-    body = (h1("switching between loop and step", "03", "switching") +
+def p_holds_switch():
+    s = C.SWITCHING
+    body = (sub("holds and combos (continued)") + rows(C.REF_HOLDS[SPLIT_HOLDS:]) +
+            h1("switching between loop and step", "03", "switching", "margin-top:34px") +
             f'<p class="lead">{md(s["intro"])}</p>' + rows(s["rows"], "mt") +
-            f'<p class="note">{md(s["note"])}</p>' +
-            h1("loop settings", "04", "loop", "margin-top:28px") +
+            f'<p class="note">{md(s["note"])}</p>')
+    return Page("02 · 03 · reference, sequencer", "switching", body, ["switching"])
+
+def p_loop():
+    l = C.LOOP
+    body = (h1("loop settings", "04", "loop") +
             f'<p>{md(l["intro"])}</p>' + knobrows(l["knobs"]) +
             f'<p class="note">{md(l["note"])}</p>')
-    return Page("03 · 04 · sequencer", "switching", body, ["switching", "loop"])
+    return Page("04 · loop settings", "loop", body, ["loop"])
 
 def p_step():
     s = C.STEP
@@ -174,7 +192,7 @@ def p_instrument(i, d):
         f'<div class="knob"><div class="kn">KNOB {k+1}</div><div class="nm">{md(n)}</div><div class="ds">{md(t)}</div></div>'
         for k, (n, t) in enumerate(d["knobs"]))
     algos = "".join(
-        f'<div class="algo"><div class="i">{k+1}</div><div><div class="nm">{md(n)}</div><div class="ds">{md(t)}</div></div></div>'
+        f'<div class="algo{" wide" if k == len(d["algos"]) - 1 and len(d["algos"]) % 2 else ""}"><div class="i">{k+1}</div><div><div class="nm">{md(n)}</div><div class="ds">{md(t)}</div></div></div>'
         for k, (n, t) in enumerate(d["algos"]))
     note = f'<p class="algonote">{md(d["algonote"])}</p>' if d.get("algonote") else ""
     first = '<span id="instruments"></span>' if i == 0 else ""
@@ -182,7 +200,7 @@ def p_instrument(i, d):
   <div class="head">
     <div class="art"><img src="img/{d["id"]}.png" alt="{d["name"]} artwork"></div>
     <div class="meta">
-      <div class="kicker"><a href="#contents">06 · instruments</a><span>{i+1:02d} / 14</span></div>
+      <div class="kicker"><a href="#contents">06 · instruments</a><span>{i+1:02d} / {len(C.INSTRUMENTS)}</span></div>
       <h2 class="name">{d["name"]}</h2>
       <div class="cat">{md(d["cat"])}</div>
       <p class="intro">{md(d["intro"])}</p>
@@ -196,7 +214,8 @@ def p_instrument(i, d):
     style = (f'--accent:{d["color"]};--accent-line:{mix(d["color"], "#1D2026", .7)};'
              f'--accent-edge:{mix(d["color"], "#17191E", .4)}')
     anchors = (["instruments"] if i == 0 else []) + [d["id"]]
-    return Page("06 · instruments", "instruments", body, anchors, cls="inst", style=style)
+    return Page("06 · instruments", "instruments", body, anchors,
+                cls="inst dense" if d["id"] in DENSE else "inst", style=style)
 
 def gsec(idx):
     title, anchor, items = C.GLOBAL_PAGES[idx]
@@ -217,38 +236,51 @@ def p_global5():
 
 def p_rec1():
     body = (h1("guide for recording", "08", "recording") + sub("recording a loop", "rec-loop") +
-            rows(C.REC_LOOP) + f'<p class="note">{md(C.REC_LOOP_NOTE)}</p>' +
-            sub("the keyboard shows the pattern", "keyboard") + paras(C.KEYBOARD_MAP[:1]))
-    return Page("08 · recording", "recording", body, ["recording", "keyboard"])
+            rows(C.REC_LOOP) + f'<p class="note">{md(C.REC_LOOP_NOTE)}</p>')
+    return Page("08 · recording", "recording", body, ["recording"])
 
 def p_rec2():
-    body = (paras(C.KEYBOARD_MAP[1:]) + sub("writing steps", "writing") + rows(C.WRITE_STEPS) +
-            f'<p class="note">{md(C.WRITE_NOTE)}</p>')
-    return Page("08 · recording", "recording", body, ["writing"])
+    body = (sub("the keyboard shows the pattern", "keyboard") + paras(C.KEYBOARD_MAP) +
+            sub("writing steps", "writing") + rows(C.WRITE_STEPS[:SPLIT_WRITE]))
+    return Page("08 · recording", "recording", body, ["keyboard", "writing"])
 
 def p_rec3():
-    body = sub("layers", "layers") + paras(C.LAYERS)
+    body = (sub("writing steps (continued)") + rows(C.WRITE_STEPS[SPLIT_WRITE:]) +
+            f'<p class="note">{md(C.WRITE_NOTE)}</p>' + sub("layers", "layers") + paras(C.LAYERS))
     return Page("08 · recording", "recording", body, ["layers"])
 
+def faq_html(items):
+    def ans(a):
+        return "".join(f"<p>{md(x)}</p>" for x in a) if isinstance(a, list) else md(a)
+    return "".join(f'<div class="faq"><div class="q">{md(q)}</div><div class="a">{ans(a)}</div></div>'
+                   for q, a in items)
+
+def p_faqs_first():
+    body = h1("faqs", "09", "faqs") + f'<div class="faqs">{faq_html(C.FAQS[:SPLIT_FAQ[0]])}</div>'
+    return Page("09 · faqs", "faqs", body, ["faqs"])
+
+def p_faqs_more(a, b):
+    body = sub("faqs (continued)") + f'<div class="faqs">{faq_html(C.FAQS[a:b])}</div>'
+    return Page("09 · faqs", "faqs", body, [])
+
 def p_faqs():
-    qa = "".join(f'<div class="faq"><div class="q">{md(q)}</div><div class="a">{md(a)}</div></div>'
-                 for q, a in C.FAQS)
+    qa = faq_html(C.FAQS[SPLIT_FAQ[-1]:])
     links = " · ".join(f'<a href="{u}">{html.escape(t)}</a>' for t, u in C.COVER["links"])
-    body = (h1("faqs", "09", "faqs") + f'<div class="faqs">{qa}</div>' +
+    body = (sub("faqs (continued)") + f'<div class="faqs">{qa}</div>' +
             f'''<div class="colophon">
-  <p>Guide matches h1's current build, <a href="{C.LINK_RELEASE}">v0.2.1 (5b697e5)</a>, 18 November 2026. This page will change as h1 does.</p>
+  <p>Guide matches h1's current build, <a href="{C.LINK_RELEASE}">{C.FIRMWARE_BUILD}</a>, {C.FIRMWARE_DATE}. This page will change as h1 does.</p>
   <p>Not affiliated with M-VAVE. FM-1 is their product. · <a href="{C.SITE}">jakehandy.com</a></p>
   <p class="links">{links}</p>
   <p class="stamp2">This edition: h1 pocket guide v{C.EDITION} ({C.EDITION_DATE}), a dark, iPad-optimised layout of Jake Handy's original guide. It documents h1 firmware {C.FIRMWARE_BUILD}. For newer builds, see <a href="{C.GUIDE_URL}">jakehandy.com/h1</a>. Layout and source: <a href="{C.REPO}">github.com/slowphase/h1-pocket-guide</a>.</p>
 </div>''')
-    return Page("09 · faqs", "faqs", body, ["faqs"])
+    return Page("09 · faqs", "faqs", body, [])
 
 # ======================================================================= assemble
 def assemble():
     global PAGES
     G = "07 · global settings"
-    PAGES = [p_cover(), p_contents(), p_intro_ref(), p_ref2(), p_ref3(1, 11, cont=True),
-             p_switch_loop(), p_step()]
+    PAGES = [p_cover(), p_contents(), p_intro(), p_intro2(), p_ref2(), p_ref3(0, SPLIT_HOLDS),
+             p_holds_switch(), p_loop(), p_step()]
     PAGES += [p_instrument(i, d) for i, d in enumerate(C.INSTRUMENTS)]
     PAGES += [p_global1(),
               Page(G, "global", lambda: sub("the metronome", "metronome") + f'<p>{md(C.METRONOME_INTRO)}</p>'
@@ -256,7 +288,8 @@ def assemble():
               Page(G, "global", lambda: gsec(1) + gsec(2), ["keys", "fx"]),
               Page(G, "global", lambda: gsec(3) + gsec(4), ["env", "lfo"]),
               Page(G, "global", lambda: gsec(5) + p_global5(), ["arp", "seq"]),
-              p_rec1(), p_rec2(), p_rec3(), p_faqs()]
+              p_rec1(), p_rec2(), p_rec3(), p_faqs_first()]
+    PAGES += [p_faqs_more(a, b) for a, b in zip(SPLIT_FAQ, SPLIT_FAQ[1:])] + [p_faqs()]
     for n, p in enumerate(PAGES, 1):
         p.num = n
         for a in p.anchors:
@@ -268,6 +301,8 @@ def toc():
         t.append([1, f"{n}  " + ("FAQs" if a == "faqs" else title[0].upper() + title[1:]), page_of(a)])
         if a == "instruments":
             t += [[2, d["name"], page_of(d["id"])] for d in C.INSTRUMENTS]
+        if a == "intro":
+            t.append([2, C.USB_TITLE, page_of("usb")])
         if a == "reference":
             t.append([2, "Holds and combos", page_of("holds")])
         if a == "global":
@@ -283,7 +318,7 @@ def toc():
 
 def document():
     return ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
-            '<title>h1 guide: M-VAVE FM-1 custom firmware with 14 instruments</title>'
+            '<title>h1 guide: M-VAVE FM-1 custom firmware with ' + str(len(C.INSTRUMENTS)) + ' instruments</title>'
             '<link rel="stylesheet" href="style.css"></head><body>'
             + "".join(p.html() for p in PAGES) + "</body></html>")
 
